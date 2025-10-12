@@ -28,18 +28,17 @@ select distinct name, city, state from stores order by name;
 -- Q7) From orders, show order_id, status, and a computed column total_items
 --     that counts how many items are in each order.
 
-select o.order_id, o.status, sum(oi.quantity) as total_items
-from orders o
-left join order_items oi
- on o.order_id=oi.order_id
- group by o.order_id,o.status; 
+select 
+    o.order_id,
+    o.status,
+    (select SUM(oi.quantity) from order_items oi where oi.order_id = o.order_id) as total_items
+from orders o;
 
 -- Q8) Show orders placed on '2025-09-04' (any time that day).
 select * from orders where order_datetime like  '%2025-09-04%';
 
 -- Q9) Return the top 3 most expensive products (price, name).
 select name, price from products order by price desc limit 3;
-
 
 -- Q10) Show customer full names as a single column 'customer_name'
 --      in the format "Last, First".
